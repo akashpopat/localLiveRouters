@@ -2,6 +2,7 @@ import nmap
 import requests
 import urllib, json
 from requests.auth import HTTPBasicAuth
+import webbrowser
 
 
 def find_ip_range():
@@ -26,9 +27,13 @@ def login(live_ips):
         try:
             if (requests.get(str(n), auth=HTTPBasicAuth('admin', 'admin'), timeout = 5)).status_code == 200:
                 openable_list.append(str(n)[:7] + "admin:admin@" + str(n)[7:])
+                webbrowser.open(str(n)[:7] + "admin:admin@" + str(n)[7:])
             elif (requests.get(str(n), auth=HTTPBasicAuth('admin', '1234'), timeout = 5)).status_code == 200:
-                print '1234 baby'
                 openable_list.append(str(n)[:7] + "admin:1234@" + str(n)[7:])
+                webbrowser.open(str(n)[:7] + "admin:1234@" + str(n)[7:])
+            else:
+                print (requests.get(str(n), auth=HTTPBasicAuth('admin', 'admin'), timeout = 5)).status_code
+
         except Exception:
             print 'timeout'
     return openable_list
